@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_anime"
+
+            android:title="@string/anime_" />
+        <item
+            android:id="@+id/nav_manga"
+            android:title="@string/manga_" />
+
+        <item
+            android:id="@+id/fav_ani"
+            android:title="@string/anime_library" />
+
+        <item
+            android:id="@+id/fav_man"
+            android:title="@string/manga_library" />
+
+    </group>
+
+    <item android:title="@string/communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_sing_out"
+                android:title="@string/sign_out_" />
+
+        </menu>
+    </item>
+
+</menu>
