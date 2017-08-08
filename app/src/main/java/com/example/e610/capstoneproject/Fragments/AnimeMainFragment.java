@@ -118,6 +118,7 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
         if (isTablet) {
             Bundle bundle = new Bundle();
             bundle.putSerializable(getString(R.string.data), datum);
+            bundle.putString(getString(R.string.user_info),userInfo);
             its_Tablet(bundle, fragment, id);
         }
     }

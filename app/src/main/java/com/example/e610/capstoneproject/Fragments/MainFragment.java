@@ -73,8 +73,17 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        userInfo=user.getUid();
-        userEmail=user.getEmail();
+        if(user!=null) {
+            userInfo = user.getUid();
+            userEmail = user.getEmail();
+        }
+
+        if(userInfo==null||userInfo.equals(""))
+            userInfo=getString(R.string.test);
+
+        if(userEmail==null||userEmail.equals(""))
+            userEmail=getString(R.string.test_);
+
         bundle.putString(getActivity().getString(R.string.user_info),userInfo);
 
         authListener = new FirebaseAuth.AuthStateListener() {

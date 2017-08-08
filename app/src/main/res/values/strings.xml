@@ -125,5 +125,7 @@
     <string name="text_plain">text/plain</string>
     <string name="this_is_float_action_button_to_share_content_and_name_of_anime_or_manga">this is Float Action Button to share content and name of anime or manga</string>
     <string name="space">" "</string>
+    <string name="test">test</string>
+    <string name="test_">test@test.com</string>
 
 </resources>
