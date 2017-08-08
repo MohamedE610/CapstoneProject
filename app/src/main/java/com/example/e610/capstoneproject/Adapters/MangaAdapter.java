@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.e610.capstoneproject.Models.Manga.ExampleManga;
 
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.squareup.picasso.Picasso;
 
 

@@ -38,38 +38,44 @@ public class AnimeDBHelper extends SQLiteOpenHelper {
                 + " (" +
                 AnimeContract.FavouriteAnimeEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID + " INTEGER NOT NULL, " +
-                AnimeContract.FavouriteAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL " +
+                AnimeContract.FavouriteAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL, " +
+                AnimeContract.FavouriteAnimeEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
         final String SQL_CREATE_FavouriteManga_TABLE = "CREATE TABLE " + AnimeContract.FavouriteMangaEntry.TABLE_NAME
                 + " (" +
                 AnimeContract.FavouriteMangaEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID + " INTEGER NOT NULL, " +
-                AnimeContract.FavouriteMangaEntry.COLUMN_manga_content + " TEXT NOT NULL " +
+                AnimeContract.FavouriteMangaEntry.COLUMN_manga_content + " TEXT NOT NULL," +
+                AnimeContract.FavouriteMangaEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
 
         final String SQL_CREATE_CompletedAnime_TABLE = "CREATE TABLE " + AnimeContract.CompletedAnimeEntry.TABLE_NAME
                 + " (" +
                 AnimeContract.CompletedAnimeEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID + " INTEGER NOT NULL, " +
-                AnimeContract.CompletedAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL " +
+                AnimeContract.CompletedAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL, " +
+                AnimeContract.CompletedAnimeEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
         final String SQL_CREATE_CompletedManga_TABLE = "CREATE TABLE " + AnimeContract.CompletedMangaEntry.TABLE_NAME
                 + " (" +
                 AnimeContract.CompletedMangaEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.CompletedMangaEntry.COLUMN_manga_ID + " INTEGER NOT NULL, " +
-                AnimeContract.CompletedMangaEntry.COLUMN_manga_content + " TEXT NOT NULL " +
+                AnimeContract.CompletedMangaEntry.COLUMN_manga_content + " TEXT NOT NULL, " +
+                AnimeContract.CompletedMangaEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
         final String SQL_CREATE_StartWatchAnime_TABLE = "CREATE TABLE " + AnimeContract.StartWatchAnimeEntry.TABLE_NAME
                 + " (" +
                 AnimeContract.StartWatchAnimeEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID + " INTEGER NOT NULL, " +
-                AnimeContract.StartWatchAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL " +
+                AnimeContract.StartWatchAnimeEntry.COLUMN_anime_content + " TEXT NOT NULL, " +
+                AnimeContract.StartWatchAnimeEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
         final String SQL_CREATE_StartWatchManga_TABLE = "CREATE TABLE " + AnimeContract.StartWatchMangaEntry.TABLE_NAME
                 + " (" +
                 AnimeContract.StartWatchMangaEntry._ID + " INTEGER PRIMARY KEY ," +
                 AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID + " INTEGER NOT NULL, " +
-                AnimeContract.StartWatchMangaEntry.COLUMN_manga_content + " TEXT NOT NULL " +
+                AnimeContract.StartWatchMangaEntry.COLUMN_manga_content + " TEXT NOT NULL, " +
+                AnimeContract.StartWatchMangaEntry.COLUMN_USER + " TEXT NOT NULL " +
                 " );";
         sqLiteDatabase.execSQL(SQL_CREATE_FavouriteAnime_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_FavouriteManga_TABLE);

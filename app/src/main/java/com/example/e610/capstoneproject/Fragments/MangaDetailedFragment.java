@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Data.AnimeContract;
 import com.example.e610.capstoneproject.Models.Manga.Datum;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -46,13 +46,14 @@ public class MangaDetailedFragment extends Fragment {
     TextView mangaType;
     private FloatingActionButton fabShare;
 
+    String userInfo="";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_manga_detail, container, false);
-        try {
+
             title = (TextView) view.findViewById(R.id.title_txt);
             startDate = (TextView) view.findViewById(R.id.start_date_txt);
             rating = (TextView) view.findViewById(R.id.rating_txt);
@@ -75,6 +76,7 @@ public class MangaDetailedFragment extends Fragment {
             fabShare = (FloatingActionButton) view.findViewById(R.id.share_fab);
 
             Bundle bundle = getArguments();
+            userInfo=bundle.getString(getString(R.string.user_info));
             manga = (Datum) bundle.getSerializable(getString(R.string.data));
 
             title.setText(manga.attributes.canonicalTitle);
@@ -143,25 +145,23 @@ public class MangaDetailedFragment extends Fragment {
                 }
             });
 
-        } catch (Exception e) {
-        }
 
         fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
+                sharingIntent.setType(getActivity().getString(R.string.text_plain));
                 String shareBody = "";
                 if (manga != null) {
                     shareBody = manga.attributes.canonicalTitle + "\n\n" + manga.attributes.synopsis;
                 }
 
                 if (shareBody.equals(""))
-                    shareBody = "Here is the share content body";
+                    shareBody = getString(R.string.share_content_body);
 
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,getString(R.string.subject_here ));
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
             }
         });
 
@@ -183,6 +183,9 @@ public class MangaDetailedFragment extends Fragment {
                 String jsonAnime = gson.toJson(manga);
                 movieValues.put(AnimeContract.FavouriteMangaEntry.COLUMN_manga_content,
                         jsonAnime);
+
+                movieValues.put(AnimeContract.FavouriteMangaEntry.COLUMN_USER,
+                        userInfo);
 
                 getActivity().getContentResolver().insert(
                         AnimeContract.FavouriteMangaEntry.CONTENT_URI,
@@ -206,7 +209,9 @@ public class MangaDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isFavorite()) {
                     getActivity().getContentResolver().delete(AnimeContract.FavouriteMangaEntry.CONTENT_URI,
-                            AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID + " = " + manga.id, null);
+                            AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID + " = " + manga.id
+                            +" and "+AnimeContract.FavouriteMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo});
+
                 }
                 return null;
             }
@@ -223,9 +228,10 @@ public class MangaDetailedFragment extends Fragment {
     private boolean isFavorite() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.FavouriteMangaEntry.CONTENT_URI,
-                new String[]{AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID},
-                AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID + " = " + manga.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.FavouriteMangaEntry.COLUMN_manga_ID + " = " + manga.id +" and "
+                        +AnimeContract.FavouriteMangaEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {
@@ -251,6 +257,9 @@ public class MangaDetailedFragment extends Fragment {
                 movieValues.put(AnimeContract.CompletedMangaEntry.COLUMN_manga_content,
                         jsonAnime);
 
+                movieValues.put(AnimeContract.CompletedMangaEntry.COLUMN_USER,
+                        userInfo);
+
                 getActivity().getContentResolver().insert(
                         AnimeContract.CompletedMangaEntry.CONTENT_URI,
                         movieValues
@@ -273,7 +282,8 @@ public class MangaDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isCompleted()) {
                     getActivity().getContentResolver().delete(AnimeContract.CompletedMangaEntry.CONTENT_URI,
-                            AnimeContract.CompletedMangaEntry.COLUMN_manga_ID + " = " + manga.id, null);
+                            AnimeContract.CompletedMangaEntry.COLUMN_manga_ID + " = " + manga.id
+                                    +" and "+AnimeContract.CompletedMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo});
                 }
                 return null;
             }
@@ -290,11 +300,11 @@ public class MangaDetailedFragment extends Fragment {
     private boolean isCompleted() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.CompletedMangaEntry.CONTENT_URI,
-                new String[]{AnimeContract.CompletedMangaEntry.COLUMN_manga_ID},
-                AnimeContract.CompletedMangaEntry.COLUMN_manga_ID + " = " + manga.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.CompletedMangaEntry.COLUMN_manga_ID + " = " + manga.id +" and "
+                        +AnimeContract.CompletedMangaEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
-
         if (movieCursor != null && movieCursor.moveToFirst()) {
             movieCursor.close();
             return true;
@@ -318,6 +328,9 @@ public class MangaDetailedFragment extends Fragment {
                 movieValues.put(AnimeContract.StartWatchMangaEntry.COLUMN_manga_content,
                         jsonAnime);
 
+                movieValues.put(AnimeContract.StartWatchMangaEntry.COLUMN_USER,
+                        userInfo);
+
                 getActivity().getContentResolver().insert(
                         AnimeContract.StartWatchMangaEntry.CONTENT_URI,
                         movieValues
@@ -340,7 +353,8 @@ public class MangaDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isStartWatch()) {
                     getActivity().getContentResolver().delete(AnimeContract.StartWatchMangaEntry.CONTENT_URI,
-                            AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID + " = " + manga.id, null);
+                            AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID + " = " + manga.id
+                                    +" and "+AnimeContract.StartWatchMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo});
                 }
                 return null;
             }
@@ -357,9 +371,10 @@ public class MangaDetailedFragment extends Fragment {
     private boolean isStartWatch() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.StartWatchMangaEntry.CONTENT_URI,
-                new String[]{AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID},
-                AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID + " = " + manga.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.StartWatchMangaEntry.COLUMN_manga_ID + " = " + manga.id +" and "
+                        +AnimeContract.StartWatchMangaEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {

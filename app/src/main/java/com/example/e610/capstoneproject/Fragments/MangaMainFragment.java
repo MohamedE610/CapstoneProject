@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Activitys.DetailedActivity;
@@ -19,12 +20,9 @@ import com.example.e610.capstoneproject.Models.Manga.ExampleManga;
 import com.example.e610.capstoneproject.Utils.FetchData;
 import com.example.e610.capstoneproject.Utils.NetworkResponse;
 import com.example.e610.capstoneproject.Utils.NetworkState;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 
-/**
- * Created by Berlin on 8/2/2017.
- */
 
 public class MangaMainFragment extends Fragment implements NetworkResponse, MangaAdapter.RecyclerViewClickListener {
 
@@ -33,6 +31,9 @@ public class MangaMainFragment extends Fragment implements NetworkResponse, Mang
     private String url;
     private boolean isTablet;
     ProgressBar progressBar;
+
+    String userInfo="";
+    Bundle bundleUser=new Bundle();
 
     public MangaMainFragment() {
         // Required empty public constructor
@@ -56,6 +57,8 @@ public class MangaMainFragment extends Fragment implements NetworkResponse, Mang
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.view_pager_fragment, container, false);
 
+        bundleUser=getArguments();
+        userInfo=bundleUser.getString(getString(R.string.user_info));
 
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -68,11 +71,29 @@ public class MangaMainFragment extends Fragment implements NetworkResponse, Mang
             fetchData.setNetworkResponse(this);
             fetchData.execute();
         } else
-            Toast.makeText(getContext(), "No internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+        TextView textView=(TextView)view.findViewById(R.id.main_title);
+        if (url.equals(getString(R.string.top_publishing_manga_link))) {
+            String s=getString(R.string.top_publishing) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.most_popular_manga_link))) {
+            String s=getString(R.string.most_popular) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.top_upcoming_manga_link))) {
+            String s=getString(R.string.top_upcoming) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.highest_rated_manga_link))) {
+            String s=getString(R.string.highest_rated) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
 
         return view;
     }
@@ -83,14 +104,16 @@ public class MangaMainFragment extends Fragment implements NetworkResponse, Mang
 
         Gson gson = new Gson();
         exampleManga = gson.fromJson(JsonData, ExampleManga.class);
-        progressBar.setVisibility(View.GONE);
+        if(exampleManga!=null) {
+            progressBar.setVisibility(View.GONE);
 
-        MangaAdapter adapter = new MangaAdapter(exampleManga, getContext());
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-        MangaDetailedFragment detailedFragment = new MangaDetailedFragment();
-        if (exampleManga.data.size() > 0)
-            CheckTabletOrNot(detailedFragment, exampleManga.data.get(0), R.id.asd);
+            MangaAdapter adapter = new MangaAdapter(exampleManga, getContext());
+            adapter.setClickListener(this);
+            recyclerView.setAdapter(adapter);
+            MangaDetailedFragment detailedFragment = new MangaDetailedFragment();
+            if (exampleManga.data.size() > 0)
+                CheckTabletOrNot(detailedFragment, exampleManga.data.get(0), R.id.asd);
+        }
     }
 
     @Override
@@ -101,10 +124,10 @@ public class MangaMainFragment extends Fragment implements NetworkResponse, Mang
     @Override
     public void ItemClicked(View v, int position) {
         Bundle bundle = new Bundle();
-        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
         Datum manga = exampleManga.data.get(position);
         bundle.putSerializable(getString(R.string.data), manga);
         bundle.putString(getString(R.string.type), getString(R.string.manga));
+        bundle.putString(getString(R.string.user_info),userInfo);
         if (!isTablet)
             startActivity(new Intent(getActivity(), DetailedActivity.class).putExtra(getString(R.string.data), bundle));
         else {

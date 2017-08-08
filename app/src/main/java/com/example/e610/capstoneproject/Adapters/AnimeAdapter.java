@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.e610.capstoneproject.Models.Anime.ExampleAnime;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.squareup.picasso.Picasso;
 
 

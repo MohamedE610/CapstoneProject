@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Activitys.DetailedActivity;
@@ -23,14 +24,11 @@ import com.example.e610.capstoneproject.Adapters.MangaAdapter;
 import com.example.e610.capstoneproject.Data.AnimeContract;
 import com.example.e610.capstoneproject.Models.Manga.Datum;
 import com.example.e610.capstoneproject.Models.Manga.ExampleManga;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-/**
- * Created by Berlin on 8/2/2017.
- */
 
 public class MangaFavouriteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         MangaAdapter.RecyclerViewClickListener {
@@ -41,7 +39,8 @@ public class MangaFavouriteFragment extends Fragment implements LoaderManager.Lo
     View view;
     private String target;
     private boolean isTablet;
-
+    String userInfo="";
+    Bundle bundleUser=new Bundle();
     public MangaFavouriteFragment() {
         // Required empty public constructor
     }
@@ -67,8 +66,25 @@ public class MangaFavouriteFragment extends Fragment implements LoaderManager.Lo
         view = inflater.inflate(R.layout.view_pager_fragment, container, false);
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
+        bundleUser=getArguments();
+        userInfo=bundleUser.getString(getString(R.string.user_info));
+
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+        TextView textView=(TextView)view.findViewById(R.id.main_title);
+        if (target.equals(getString(R.string.favourite))) {
+            String s=getString(R.string.favourite) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
+        else if (target.equals(getString(R.string.completed))) {
+            String s=getString(R.string.completed) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
+        else if (target.equals(getString(R.string.startWatch))) {
+            String s=getString(R.string.start_reading) + getString(R.string.space) + getString(R.string.manga_);
+            textView.setText(s);
+        }
 
         return view;
     }
@@ -77,10 +93,10 @@ public class MangaFavouriteFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void ItemClicked(View v, int position) {
         Bundle bundle = new Bundle();
-        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
         Datum manga = exampleManga.data.get(position);
         bundle.putSerializable(getString(R.string.data), manga);
         bundle.putString(getString(R.string.type), getString(R.string.manga));
+        bundle.putString(getString(R.string.user_info),userInfo);
         if (!isTablet)
             startActivity(new Intent(getActivity(), DetailedActivity.class).putExtra(getString(R.string.data), bundle));
         else {
@@ -103,15 +119,14 @@ public class MangaFavouriteFragment extends Fragment implements LoaderManager.Lo
 
         CursorLoader cursorLoader = null;
         if (target.equals(getString(R.string.favourite)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.FavouriteMangaEntry.CONTENT_URI, null,
-                    null, null, null);
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.FavouriteMangaEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.FavouriteMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
         else if (target.equals(getString(R.string.completed)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.CompletedMangaEntry.CONTENT_URI, null,
-                    null, null, null);
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.CompletedMangaEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.CompletedMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
         else if (target.equals(getString(R.string.startWatch)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.StartWatchMangaEntry.CONTENT_URI, null,
-                    null, null, null);
-
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.StartWatchMangaEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.StartWatchMangaEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
         return cursorLoader;
     }
 

@@ -26,7 +26,10 @@
             android:layout_gravity="bottom|end"
             android:id="@+id/share_fab"
             app:useCompatPadding="true"
-            style="@style/FABStyle"></android.support.design.widget.FloatingActionButton>|
+            style="@style/FABStyle"
+            android:contentDescription="@string/this_is_float_action_button_to_share_content_and_name_of_anime_or_manga">
+
+        </android.support.design.widget.FloatingActionButton>|
 
         <!--android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"-->

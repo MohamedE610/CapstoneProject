@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import android.support.v4.app.Fragment;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Adapters.AnimeAdapter;
@@ -20,12 +21,9 @@ import com.example.e610.capstoneproject.Models.Anime.ExampleAnime;
 import com.example.e610.capstoneproject.Utils.FetchData;
 import com.example.e610.capstoneproject.Utils.NetworkResponse;
 import com.example.e610.capstoneproject.Utils.NetworkState;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 
-/**
- * Created by Berlin on 8/2/2017.
- */
 
 public class AnimeMainFragment extends Fragment implements NetworkResponse, AnimeAdapter.RecyclerViewClickListener {
 
@@ -33,7 +31,8 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
     ExampleAnime exampleAnime;
     String url;
     private boolean isTablet;
-
+    String userInfo="";
+    Bundle bundleUser=new Bundle();
     public AnimeMainFragment() {
         // Required empty public constructor
     }
@@ -55,6 +54,8 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.view_pager_fragment, container, false);
 
+        bundleUser=getArguments();
+        userInfo=bundleUser.getString(getString(R.string.user_info));
 
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -67,13 +68,31 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
             fetchData.setNetworkResponse(this);
             fetchData.execute();
         } else
-            Toast.makeText(getContext(), "No internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
+
+        TextView textView=(TextView)view.findViewById(R.id.main_title);
+        if (url.equals(getString(R.string.top_airing_anime_link))) {
+            String s=getString(R.string.top_airing) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.most_popular_anime_link))) {
+            String s=getString(R.string.most_popular) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.top_upcoming_anime_link))) {
+            String s=getString(R.string.top_upcoming) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+        else if (url.equals(getString(R.string.highest_rated_anime_link))) {
+            String s=getString(R.string.highest_rated) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
         return view;
     }
 
@@ -82,14 +101,16 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
 
         Gson gson = new Gson();
         exampleAnime = gson.fromJson(JsonData, ExampleAnime.class);
-        progressBar.setVisibility(View.GONE);
+        if(exampleAnime!=null) {
+            progressBar.setVisibility(View.GONE);
 
-        AnimeAdapter adapter = new AnimeAdapter(exampleAnime, getContext());
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-        AnimeDetailedFragment detailedFragment = new AnimeDetailedFragment();
-        if (exampleAnime.data.size() > 0)
-            CheckTabletOrNot(detailedFragment, exampleAnime.data.get(0), R.id.asd);
+            AnimeAdapter adapter = new AnimeAdapter(exampleAnime, getContext());
+            adapter.setClickListener(this);
+            recyclerView.setAdapter(adapter);
+            AnimeDetailedFragment detailedFragment = new AnimeDetailedFragment();
+            if (exampleAnime.data.size() > 0)
+                CheckTabletOrNot(detailedFragment, exampleAnime.data.get(0), R.id.asd);
+        }
 
     }
 
@@ -109,10 +130,10 @@ public class AnimeMainFragment extends Fragment implements NetworkResponse, Anim
     @Override
     public void ItemClicked(View v, int position) {
         Bundle bundle = new Bundle();
-        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
         Datum anime = exampleAnime.data.get(position);
         bundle.putSerializable(getString(R.string.data), anime);
         bundle.putString(getString(R.string.type), getString(R.string.anime));
+        bundle.putString(getString(R.string.user_info),userInfo);
         if (!isTablet) {
             startActivity(new Intent(getActivity(), DetailedActivity.class).putExtra(getString(R.string.data), bundle));
         } else {

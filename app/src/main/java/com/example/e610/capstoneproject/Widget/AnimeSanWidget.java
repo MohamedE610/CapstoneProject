@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
 
 import com.example.e610.capstoneproject.Activitys.DetailedActivity;
 import com.example.e610.capstoneproject.Activitys.MainActivity;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 
 /**
  * Implementation of App Widget functionality.

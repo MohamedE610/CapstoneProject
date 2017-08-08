@@ -7,8 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.e610.capstoneproject.Fragments.AnimeDetailedFragment;
 import com.example.e610.capstoneproject.Fragments.MangaDetailedFragment;
-import com.exampleAnime.e610.capstoneproject.R;
-
+import com.example.e610.capstoneproject.R;
 
 public class DetailedActivity extends AppCompatActivity {
 

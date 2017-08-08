@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Adapters.AnimeAdapter;
@@ -23,7 +24,7 @@ import com.example.e610.capstoneproject.Activitys.DetailedActivity;
 import com.example.e610.capstoneproject.Data.AnimeContract;
 import com.example.e610.capstoneproject.Models.Anime.Datum;
 import com.example.e610.capstoneproject.Models.Anime.ExampleAnime;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class AnimeFavouriteFragment extends Fragment implements LoaderManager.Lo
     private String target;
     private boolean isTablet;
 
+    String userInfo="";
+    Bundle bundleUser=new Bundle();
     public AnimeFavouriteFragment() {
         // Required empty public constructor
     }
@@ -65,10 +68,28 @@ public class AnimeFavouriteFragment extends Fragment implements LoaderManager.Lo
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.view_pager_fragment, container, false);
 
+        bundleUser=getArguments();
+        userInfo=bundleUser.getString(getString(R.string.user_info));
+
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+        TextView textView=(TextView)view.findViewById(R.id.main_title);
+        if (target.equals(getString(R.string.favourite))) {
+            String s=getString(R.string.favourite) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+        else if (target.equals(getString(R.string.completed))) {
+            String s=getString(R.string.completed) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+        else if (target.equals(getString(R.string.startWatch))) {
+            String s=getString(R.string.start_watch) + getString(R.string.space) + getString(R.string.anime_);
+            textView.setText(s);
+        }
+
 
         return view;
     }
@@ -77,10 +98,10 @@ public class AnimeFavouriteFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void ItemClicked(View v, int position) {
         Bundle bundle = new Bundle();
-        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
         Datum anime = exampleAnime.data.get(position);
         bundle.putSerializable(getString(R.string.data), anime);
         bundle.putString(getString(R.string.type), getString(R.string.anime));
+        bundle.putString(getString(R.string.user_info),userInfo);
         if (!isTablet) {
             startActivity(new Intent(getActivity(), DetailedActivity.class).putExtra(getString(R.string.data), bundle));
         } else {
@@ -101,15 +122,16 @@ public class AnimeFavouriteFragment extends Fragment implements LoaderManager.Lo
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = null;
+
         if (target.equals(getString(R.string.favourite)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.FavouriteAnimeEntry.CONTENT_URI, null,
-                    null, null, null);
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.FavouriteAnimeEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.FavouriteAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
         else if (target.equals(getString(R.string.completed)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.CompletedAnimeEntry.CONTENT_URI, null,
-                    null, null, null);
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.CompletedAnimeEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.CompletedAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
         else if (target.equals(getString(R.string.startWatch)))
-            cursorLoader = new CursorLoader(getActivity(), AnimeContract.StartWatchAnimeEntry.CONTENT_URI, null,
-                    null, null, null);
+            cursorLoader = new CursorLoader(getActivity(), AnimeContract.StartWatchAnimeEntry.CONTENT_URI, new String[]{"*"},
+                    AnimeContract.StartWatchAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo}, null);
 
         return cursorLoader;
     }

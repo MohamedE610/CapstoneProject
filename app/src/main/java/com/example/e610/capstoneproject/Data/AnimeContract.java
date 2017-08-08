@@ -48,6 +48,11 @@ public class AnimeContract {
         public static final String COLUMN_anime_content = "anime_content";
 
 
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
+
+
+
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
@@ -59,6 +64,7 @@ public class AnimeContract {
 
         public static final int COL_anime_ID = 1;
         public static final int COL_anime_content = 2;
+
     }
 
     public static final class FavouriteMangaEntry implements BaseColumns {
@@ -72,6 +78,9 @@ public class AnimeContract {
         public static final String TABLE_NAME = "FavouriteManga";
         public static final String COLUMN_manga_ID = "manga_id";
         public static final String COLUMN_manga_content = "manga_content";
+
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
 
 
         public static Uri buildMovieUri(long id) {
@@ -101,6 +110,9 @@ public class AnimeContract {
         public static final String COLUMN_anime_content = "anime_content";
 
 
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
+
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
@@ -126,6 +138,8 @@ public class AnimeContract {
         public static final String COLUMN_manga_ID = "manga_id";
         public static final String COLUMN_manga_content = "manga_content";
 
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -152,6 +166,8 @@ public class AnimeContract {
         public static final String COLUMN_anime_ID = "anime_id";
         public static final String COLUMN_anime_content = "anime_content";
 
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -178,6 +194,8 @@ public class AnimeContract {
         public static final String COLUMN_manga_ID = "manga_id";
         public static final String COLUMN_manga_content = "manga_content";
 
+        public static final int COL_USER = 3;
+        public static final String COLUMN_USER = "user";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

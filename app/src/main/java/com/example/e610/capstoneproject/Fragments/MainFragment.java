@@ -21,9 +21,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.e610.capstoneproject.Activitys.LoginActivity;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -44,6 +45,9 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
     private FirebaseAuth auth;
     View view;
 
+    String userInfo;
+    String userEmail;
+    Bundle bundle;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
         view = inflater.inflate(R.layout.activity_main, container, false);
 
+        bundle=new Bundle();
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
@@ -67,6 +72,10 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        userInfo=user.getUid();
+        userEmail=user.getEmail();
+        bundle.putString(getActivity().getString(R.string.user_info),userInfo);
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -89,6 +98,14 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
+
+       /*this line to add header view to navigationView programmatically
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_navigation_drawer);*/
+
+        //this line to get existed  headerView in navigationView
+        View headerView = navigationView.getHeaderView(0); // 0-index header
+        TextView textView=(TextView)headerView.findViewById(R.id.nav_header_textView);
+        textView.setText(userEmail);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -174,18 +191,22 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
             //Most Popular Anime
             AnimeMainFragment animeMainFragment = new AnimeMainFragment();
+            animeMainFragment.setArguments(bundle);
             animeMainFragment.setUrl(getString(R.string.most_popular_anime_link));
 
             //Top Upcoming Anime
             AnimeMainFragment animeMainFragment1 = new AnimeMainFragment();
+            animeMainFragment1.setArguments(bundle);
             animeMainFragment1.setUrl(getString(R.string.top_upcoming_anime_link));
 
             //Top Airing Anime
             AnimeMainFragment animeMainFragment2 = new AnimeMainFragment();
+            animeMainFragment2.setArguments(bundle);
             animeMainFragment2.setUrl(getString(R.string.top_airing_anime_link));
 
             //Highest Rated Anime
             AnimeMainFragment animeMainFragment3 = new AnimeMainFragment();
+            animeMainFragment3.setArguments(bundle);
             animeMainFragment3.setUrl(getString(R.string.highest_rated_anime_link));
 
 
@@ -200,18 +221,22 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
             //Most Popular Manga
             MangaMainFragment mangaMainFragment = new MangaMainFragment();
+            mangaMainFragment.setArguments(bundle);
             mangaMainFragment.setUrl(getString(R.string.most_popular_manga_link));
 
             //Highest Rated Manga
             MangaMainFragment mangaMainFragment1 = new MangaMainFragment();
+            mangaMainFragment1.setArguments(bundle);
             mangaMainFragment1.setUrl(getString(R.string.highest_rated_manga_link));
 
             //Top Upcoming Manga
             MangaMainFragment mangaMainFragment2 = new MangaMainFragment();
+            mangaMainFragment2.setArguments(bundle);
             mangaMainFragment2.setUrl(getString(R.string.top_upcoming_manga_link));
 
             //Top Publishing Manga
             MangaMainFragment mangaMainFragment3 = new MangaMainFragment();
+            mangaMainFragment3.setArguments(bundle);
             mangaMainFragment3.setUrl(getString(R.string.top_publishing_manga_link));
 
             adapter.addFragment(mangaMainFragment, getString(R.string.most_popular));
@@ -230,6 +255,9 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
             animeFavouriteFragment.setTarget(getString(R.string.favourite));
             animeFavouriteFragment1.setTarget(getString(R.string.completed));
             animeFavouriteFragment2.setTarget(getString(R.string.startWatch));
+            animeFavouriteFragment.setArguments(bundle);
+            animeFavouriteFragment1.setArguments(bundle);
+            animeFavouriteFragment2.setArguments(bundle);
 
             adapter.addFragment(animeFavouriteFragment, getString(R.string.favourite));
             adapter.addFragment(animeFavouriteFragment1, getString(R.string.completed));
@@ -247,6 +275,10 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
             mangaFavouriteFragment.setTarget(getString(R.string.favourite));
             mangaFavouriteFragment1.setTarget(getString(R.string.completed));
             mangaFavouriteFragment2.setTarget(getString(R.string.startWatch));
+            mangaFavouriteFragment.setArguments(bundle);
+            mangaFavouriteFragment1.setArguments(bundle);
+            mangaFavouriteFragment2.setArguments(bundle);
+
 
             adapter.addFragment(mangaFavouriteFragment, getString(R.string.favourite));
             adapter.addFragment(mangaFavouriteFragment1, getString(R.string.completed));

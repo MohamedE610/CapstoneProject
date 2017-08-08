@@ -120,5 +120,10 @@
     <string name="manga_library">Manga Library</string>
     <string name="communicate">Communicate</string>
     <string name="sign_out_">Sign Out</string>
+    <string name="user_info">userInfo</string>
+    <string name="no_internet">No internet Connection</string>
+    <string name="text_plain">text/plain</string>
+    <string name="this_is_float_action_button_to_share_content_and_name_of_anime_or_manga">this is Float Action Button to share content and name of anime or manga</string>
+    <string name="space">" "</string>
 
 </resources>

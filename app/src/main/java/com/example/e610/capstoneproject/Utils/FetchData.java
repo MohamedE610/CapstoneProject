@@ -102,7 +102,6 @@ public class FetchData extends AsyncTask<Void, Void, String> {
         /*    Gson gson = new Gson();
             ExampleAnime example=gson.fromJson(JsonData, ExampleAnime.class);*/
 
-
             if (JsonData.equals("") || JsonData == null) {
                 networkResponse.OnFailure(true);
             }

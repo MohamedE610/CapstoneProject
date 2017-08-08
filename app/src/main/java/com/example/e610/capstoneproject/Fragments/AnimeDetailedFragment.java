@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.e610.capstoneproject.Data.AnimeContract;
 import com.example.e610.capstoneproject.Models.Anime.Datum;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -47,11 +47,14 @@ public class AnimeDetailedFragment extends Fragment {
     ImageView trailer;
     FloatingActionButton fabShare;
 
+    String userInfo="";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_anime_detail, container, false);
+
 
         title = (TextView) view.findViewById(R.id.title_txt);
         startDate = (TextView) view.findViewById(R.id.start_date_txt);
@@ -73,6 +76,7 @@ public class AnimeDetailedFragment extends Fragment {
         fabShare = (FloatingActionButton) view.findViewById(R.id.share_fab);
 
         Bundle bundle = getArguments();
+        userInfo=bundle.getString(getString(R.string.user_info));
         anime = (Datum) bundle.getSerializable(getString(R.string.data));
 
         title.setText(anime.attributes.canonicalTitle);
@@ -153,11 +157,12 @@ public class AnimeDetailedFragment extends Fragment {
         });
 
 
+        
         fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
+                sharingIntent.setType(getActivity().getString(R.string.text_plain));
                 String shareBody = "";
                 if (anime != null) {
                     shareBody = anime.attributes.canonicalTitle + "\n\n" + anime.attributes.synopsis;
@@ -186,10 +191,14 @@ public class AnimeDetailedFragment extends Fragment {
                 ContentValues movieValues = new ContentValues();
                 movieValues.put(AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID,
                         anime.id);
+
                 Gson gson = new Gson();
                 String jsonAnime = gson.toJson(anime);
                 movieValues.put(AnimeContract.FavouriteAnimeEntry.COLUMN_anime_content,
                         jsonAnime);
+
+                movieValues.put(AnimeContract.FavouriteAnimeEntry.COLUMN_USER,
+                        userInfo);
 
                 getActivity().getContentResolver().insert(
                         AnimeContract.FavouriteAnimeEntry.CONTENT_URI,
@@ -213,7 +222,8 @@ public class AnimeDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isFavorite()) {
                     getActivity().getContentResolver().delete(AnimeContract.FavouriteAnimeEntry.CONTENT_URI,
-                            AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID + " = " + anime.id, null);
+                            AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID + " = " + anime.id
+                                    +" and "+AnimeContract.FavouriteAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo});
                 }
                 return null;
             }
@@ -230,9 +240,10 @@ public class AnimeDetailedFragment extends Fragment {
     private boolean isFavorite() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.FavouriteAnimeEntry.CONTENT_URI,
-                new String[]{AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID},
-                AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID + " = " + anime.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.FavouriteAnimeEntry.COLUMN_anime_ID + " = " + anime.id +" and "
+                        +AnimeContract.FavouriteAnimeEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {
@@ -259,6 +270,9 @@ public class AnimeDetailedFragment extends Fragment {
                 movieValues.put(AnimeContract.CompletedAnimeEntry.COLUMN_anime_content,
                         jsonAnime);
 
+                movieValues.put(AnimeContract.CompletedAnimeEntry.COLUMN_USER,
+                        userInfo);
+
                 getActivity().getContentResolver().insert(
                         AnimeContract.CompletedAnimeEntry.CONTENT_URI,
                         movieValues
@@ -281,7 +295,8 @@ public class AnimeDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isCompleted()) {
                     getActivity().getContentResolver().delete(AnimeContract.CompletedAnimeEntry.CONTENT_URI,
-                            AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID + " = " + anime.id, null);
+                            AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID + " = " + anime.id
+                                    +" and "+AnimeContract.CompletedAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo});
                 }
                 return null;
             }
@@ -298,9 +313,10 @@ public class AnimeDetailedFragment extends Fragment {
     private boolean isCompleted() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.CompletedAnimeEntry.CONTENT_URI,
-                new String[]{AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID},
-                AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID + " = " + anime.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.CompletedAnimeEntry.COLUMN_anime_ID + " = " + anime.id +" and "
+                        +AnimeContract.CompletedAnimeEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {
@@ -326,6 +342,9 @@ public class AnimeDetailedFragment extends Fragment {
                 movieValues.put(AnimeContract.StartWatchAnimeEntry.COLUMN_anime_content,
                         jsonAnime);
 
+                movieValues.put(AnimeContract.StartWatchAnimeEntry.COLUMN_USER,
+                        userInfo);
+
                 getActivity().getContentResolver().insert(
                         AnimeContract.StartWatchAnimeEntry.CONTENT_URI,
                         movieValues
@@ -348,7 +367,8 @@ public class AnimeDetailedFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 if (isStartWatch()) {
                     getActivity().getContentResolver().delete(AnimeContract.StartWatchAnimeEntry.CONTENT_URI,
-                            AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID + " = " + anime.id, null);
+                            AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID + " = " + anime.id
+                                    +" and "+AnimeContract.StartWatchAnimeEntry.COLUMN_USER+" = ?", new String[]{userInfo});
                 }
                 return null;
             }
@@ -365,9 +385,10 @@ public class AnimeDetailedFragment extends Fragment {
     private boolean isStartWatch() {
         Cursor movieCursor = getActivity().getContentResolver().query(
                 AnimeContract.StartWatchAnimeEntry.CONTENT_URI,
-                new String[]{AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID},
-                AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID + " = " + anime.id,
-                null,
+                new String[]{"*"},
+                AnimeContract.StartWatchAnimeEntry.COLUMN_anime_ID + " = " + anime.id +" and "
+                        +AnimeContract.StartWatchAnimeEntry.COLUMN_USER+" = ?",
+                new String[]{userInfo},
                 null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {

@@ -14,7 +14,7 @@ import android.widget.RemoteViewsService;
 
 import com.example.e610.capstoneproject.Data.AnimeContract;
 import com.example.e610.capstoneproject.Models.Anime.Datum;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -108,7 +108,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             views.setImageViewBitmap(R.id.anime_widget_img, bitmap);
 
         } catch (IOException e) {
-            Log.e("asdasd", "asdasd", e);
             e.printStackTrace();
         }
 

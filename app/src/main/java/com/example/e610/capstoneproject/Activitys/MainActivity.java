@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 
 import com.example.e610.capstoneproject.Fragments.MainFragment;
-import com.exampleAnime.e610.capstoneproject.R;
+import com.example.e610.capstoneproject.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
