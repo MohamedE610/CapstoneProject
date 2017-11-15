@@ -58,7 +58,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         holder.textView.setText(exampleAnime.data.get(position).attributes.canonicalTitle);
-        String str = exampleAnime.data.get(position).attributes.posterImage.original;
+        String str = exampleAnime.data.get(position).attributes.posterImage.medium;
 
         Picasso.with(context).load(str).placeholder(R.drawable.asd)
                 .error(R.drawable.asd).into(holder.imageView);

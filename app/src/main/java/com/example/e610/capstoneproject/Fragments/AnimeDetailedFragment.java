@@ -90,7 +90,7 @@ public class AnimeDetailedFragment extends Fragment {
         float f = anime.attributes.averageRating == null ? 1 : Float.valueOf(anime.attributes.averageRating);
         ratingBar.setRating(f / 20);
 
-        String s = anime.attributes.coverImage == null ? getString(R.string.error) : anime.attributes.coverImage.original;
+        String s = anime.attributes.coverImage == null ? getString(R.string.error) : anime.attributes.coverImage.large;
         Picasso.with(getActivity()).load(s).placeholder(R.drawable.asd)
                 .error(R.drawable.asd).into(cover);
 

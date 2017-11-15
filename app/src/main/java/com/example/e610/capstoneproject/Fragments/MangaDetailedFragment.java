@@ -92,7 +92,7 @@ public class MangaDetailedFragment extends Fragment {
             float f = manga.attributes.averageRating == null ? 1 : Float.valueOf(manga.attributes.averageRating);
             ratingBar.setRating(f / 20);
 
-            String s = manga.attributes.coverImage == null ? getString(R.string.error) : manga.attributes.coverImage.original;
+            String s = manga.attributes.coverImage == null ? getString(R.string.error) : manga.attributes.coverImage.large;
             Picasso.with(getActivity()).load(s).placeholder(R.drawable.asd)
                     .error(R.drawable.asd).into(cover);
 
